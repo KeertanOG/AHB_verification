@@ -29,8 +29,8 @@ class AHB_mon;
   
 
   task run();
-    //forever begin
-    //end
+    forever begin
+    end
   endtask
 
 endclass

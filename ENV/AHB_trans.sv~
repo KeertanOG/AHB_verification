@@ -56,9 +56,12 @@ class AHB_trans;
     case(this.hburst_e)
       SINGLE : return 1;
       INCR : return 1;			//temporary value for INCR
-      WRAP4,INCR4: return 4;
-      WRAP8,INCR8: return 8;
-      WRAP16, INCR16: return 16;
+      WRAP4: return 4;
+      INCR4 : return 4;
+      WRAP8: return 8;
+      INCR8 : return 8;
+      WRAP16: return 16;
+      INCR16 : return 16;
     endcase
   endfunction
 

@@ -31,9 +31,9 @@ class AHB_scb;
   endfunction
 
   task run();
-   // forever begin
+    forever begin
       // Comparison logic here
-   // end
+    end
   endtask
 
 endclass
