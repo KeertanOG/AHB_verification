@@ -18,27 +18,29 @@
 class AHB_mon;
 
   virtual AHB_inf.MON_MP vif;
-  mailbox #(AHB_trans) mon2sb;
+  mailbox #(AHB_trans) mon2scb;
+  mailbox #(AHB_trans) mon2ref;
   AHB_trans trans_h;
 
 
-  function void connect(virtual AHB_inf.MON_MP mon_vif,
-                        mailbox #(AHB_trans) mon2sb);
+ function void connect(virtual AHB_inf.MON_MP mon_vif,
+                        mailbox #(AHB_trans) mon2csb, mailbox #(AHB_trans) mon2ref);
     this.vif = mon_vif;
-    this.mon2sb = mon2sb;
-  endfunction
+    this.mon2scb = mon2scb;
+    this.mon2ref = mon2ref;
+ endfunction
  task get_control_signals();              //samples the control signals
    case(vif.mon_cb.hburst)
-     3'b000 : trans_h.burst = hburst_e.SINGLE;
-     3'b001 : trans_h.burst = hburst_e.INCR;
-     3'b010 : trans_h.burst = hburst_e.WRAP4;
-     3'b011 : trans_h.burst = hburst_e.INCR4;
-     3'b100 : trans_h.burst = hburst_e.WRAP8;
-     3'b101 : trans_h.burst = hburst_e.INCR8;
-     3'b110 : trans_h.burst = hburst_e.WRAP16;
-     3'b111 : trans_h.burst = hburst_e.INCR16;
+     3'b000 : trans_h.hburst_e = SINGLE;
+     3'b001 : trans_h.hburst_e = INCR;
+     3'b010 : trans_h.hburst_e = WRAP4;
+     3'b011 : trans_h.hburst_e = INCR4;
+     3'b100 : trans_h.hburst_e = WRAP8;
+     3'b101 : trans_h.hburst_e = INCR8;
+     3'b110 : trans_h.hburst_e = WRAP16;
+     3'b111 : trans_h.hburst_e = INCR16;
    endcase
-   trans_h.hsel = vif.mon_cb.sel;
+   trans_h.hsel = vif.mon_cb.hsel;
    trans_h.hwrite = vif.mon_cb.hwrite;
    trans_h.hsize = vif.mon_cb.hsize;
    trans_h.htrans = vif.mon_cb.htrans;
@@ -54,6 +56,20 @@ class AHB_mon;
  endtask
 
  task get_data_signals();                 //samples the data signals
+   //repeat(2) @(vif.mon_cb iff vif.mon_cb.hreadyout);
+   repeat(2) @(vif.mon_cb);             //temporary until design is integrated
+   if(vif.mon_cb.hwrite)
+     trans_h.hwdata_que.push_back(vif.mon_cb.hwdata);
+   else
+     trans_h.hrdata_que.push_back(vif.mon_cb.hrdata);
+   if(trans_h.calc_txf > 1) begin
+     for(int i =0; i < trans_h.calc_txf -1; i++) begin
+       if(vif.mon_cb.hwrite)
+         trans_h.hwdata_que.push_back(vif.mon_cb.hwdata);
+       else
+         trans_h.hrdata_que.push_back(vif.mon_cb.hrdata);
+     end
+   end
  endtask
 
  task get_from_dut();
@@ -65,8 +81,13 @@ class AHB_mon;
 
   task run();
     trans_h = new();
-//    forever begin
-//    end
+    forever begin
+      trans_h = new();
+      get_from_dut();
+      trans_h.print("Monitor");
+      mon2scb.put(trans_h);
+      mon2ref.put(trans_h);
+    end
   endtask
 
 endclass

@@ -67,3 +67,5 @@ endclass
 `endif
 
 //haddr_que ->create it to store the addresses for the each transfer of transaction
+//remove hsel from transaction class
+//why can't we extend the address phase

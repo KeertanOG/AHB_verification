@@ -50,7 +50,7 @@ class AHB_env;
     this.drv_vif = drv_vif;
     gen.connect(gen2drv);
     drv.connect(gen2drv, drv_vif);
-    mon.connect(mon_vif, mon2scb);
+    mon.connect(mon_vif, mon2scb, mon2ref);
     ref_env.connect(mon2ref, rm2scb);
     sb.connect(mon2scb, rm2scb);
   endfunction
