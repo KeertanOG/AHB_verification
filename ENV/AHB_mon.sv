@@ -82,11 +82,13 @@ class AHB_mon;
   task run();
     trans_h = new();
     forever begin
-      trans_h = new();
-      get_from_dut();
-      trans_h.print("Monitor");
-      mon2scb.put(trans_h);
-      mon2ref.put(trans_h);
+      fork
+        trans_h = new();
+        get_from_dut();
+        trans_h.print("Monitor");
+        mon2scb.put(trans_h);
+        mon2ref.put(trans_h);
+      join_any
     end
   endtask
 
