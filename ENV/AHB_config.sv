@@ -15,11 +15,11 @@
 `ifndef AHB_CONFIG_SV
 `define AHB_CONFIG_SV
 
-class AHB_config_pipeline;
+class AHB_config;
   static bit pipe_status;
   
   static function void set_pipeline(bit status);
-    this.pipe_status = status;
+    pipe_status = status;
   endfunction
 endclass
 
