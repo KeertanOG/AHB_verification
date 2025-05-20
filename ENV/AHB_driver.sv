@@ -167,13 +167,21 @@ class AHB_driver;
   endtask
 
   task send_to_dut;
-    fork
-      @(vif.drv_cb) drive_control_signals();
-      begin 
-        repeat(2) @(vif.drv_cb);
-        drive_data_signals();
-      end
-    join_any
+    if(AHB_config::pipe_status == 1) begin
+      fork
+        @(vif.drv_cb) drive_control_signals();
+        begin 
+          repeat(2) @(vif.drv_cb);
+          drive_data_signals();
+        end
+      join_any
+    end
+    else begin
+      @(vif.drv_cb);
+      drive_control_signals();
+      @(vif.drv_cb);
+      drive_data_signals();
+    end
   endtask
 
   task run();
