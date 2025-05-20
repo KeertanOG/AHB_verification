@@ -47,8 +47,8 @@ class AHB_trans;
     $display("                                       ");
     $display("=======================================");
     $display("called %s at %0t",obj,$time);
-    $display("| rst | sel | address | htrans | hwrite | hsize | hburst | hwdata | hrdata | hreadyout | hresp |");
-    $display("| %0d | %0d | %0d     | %0d    | %0d    | %0d   | %s    |  %0d   |   %0d  | %0d       |  %0d  |",hresetn, hsel, haddr, htrans, hwrite, hsize, hburst_e.name, hwdata, hrdata, hreadyout, hresp);
+    $display("| address | htrans | hwrite | hsize | hburst | hwdata | hrdata | hreadyout | hresp |");
+    $display("| %0d     | %0d    | %0d    | %0d   | %s    |  %0d   |   %0d  | %0d       |  %0d  |", haddr, htrans, hwrite, hsize, hburst_e.name, hwdata, hrdata, hreadyout, hresp);
     $display("=======================================");
   endfunction
   
