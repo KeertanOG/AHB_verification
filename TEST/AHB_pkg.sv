@@ -19,7 +19,7 @@
 `include "AHB_inf.sv"
 
 package AHB_pkg;
-
+  `include "AHB_config.sv"
   `include "AHB_trans.sv"
   `include "AHB_gen.sv"
   `include "AHB_driver.sv"
