@@ -180,18 +180,18 @@ class AHB_driver;
     trans_h = new();
     trans_h2 =new();
     trans_h3 = new();
-    fork
-      repeat(20) begin
+    repeat(20) begin
+      fork
         gen2drv.get(trans_h);
         trans_h.print("Driver");
         addr_phase_que.push_back(trans_h);
         data_phase_que.push_back(trans_h);
         send_to_dut();
         //trans_h.print("Driver");
-      end
+      join
+    end
       //drive_control_io();                       //drives the control signals of AHB
       //drive_data_in();                          //drives the data signal of AHB
-    join
   endtask
 
 
