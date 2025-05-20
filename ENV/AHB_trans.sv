@@ -39,7 +39,7 @@ class AHB_trans;
   bit [`DATA_WIDTH-1 :0]hwdata_que[$];			//write data
   bit [`DATA_WIDTH-1 :0]hrdata_que[$];			//read data
   
-  constraint hsize_range {hsize inside [0:2];}
+  constraint hsize_range {hsize inside {[0:2]};}
   constraint align_address {haddr % (1 << hsize) == 0;}
 
 //write a constraint for 1kb limit

@@ -19,18 +19,16 @@ typedef enum bit[2:0] {SINGLE, INCR, WRAP4, INCR4, WRAP8, INCR8, WRAP16, INCR16}
 
 class AHB_trans;
   
-  bit hresetn;                                //active low signal
-  bit hsel;                                   //slave select line
   rand bit [`ADDR_WIDTH-1:0]haddr;            //address bus
   bit [1:0]htrans;                            //transaction type
-  bit hwrite;                                 //trasnfer direction
+  rand bit hwrite;                                 //transfer direction
   rand bit[2:0]hsize;                         //transfer size
   //bit[2:0]hburst;                             //burst type
   rand bit [`DATA_WIDTH-1:0]hwdata;           //write data
 
   //slave output signals
   bit [31:0]hrdata;                           //read data
-  bit hreadyout;                              //transfer status signal
+  bit hready;                                 //transfer status signal
   bit[1:0] hresp;                             //response signal
   
   rand burst_type hburst_e;                        //enum instantiation of hburst_type enum
@@ -40,6 +38,9 @@ class AHB_trans;
   //queue for storing write data and read data
   bit [`DATA_WIDTH-1 :0]hwdata_que[$];			//write data
   bit [`DATA_WIDTH-1 :0]hrdata_que[$];			//read data
+  
+  constraint hsize_range {hsize inside [0:2];}
+  constraint align_address {haddr % (1 << hsize) == 0;}
 
 //write a constraint for 1kb limit
   function void print(string obj);
@@ -65,7 +66,5 @@ class AHB_trans;
 endclass
 
 `endif
-
-//haddr_que ->create it to store the addresses for the each transfer of transaction
 //remove hsel from transaction class
 //why can't we extend the address phase
