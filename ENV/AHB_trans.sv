@@ -24,7 +24,7 @@ class AHB_trans;
   rand bit hwrite;                                 //transfer direction
   rand bit[2:0]hsize;                         //transfer size
   //bit[2:0]hburst;                             //burst type
-  rand bit [`DATA_WIDTH-1:0]hwdata;           //write data
+  bit [`DATA_WIDTH-1:0]hwdata;           //write data
 
   //slave output signals
   bit [31:0]hrdata;                           //read data
@@ -36,7 +36,7 @@ class AHB_trans;
   bit [`ADDR_WIDTH-1: 0] haddr_que[$];
   
   //queue for storing write data and read data
-  bit [`DATA_WIDTH-1 :0]hwdata_que[$];			//write data
+  rand bit [`DATA_WIDTH-1 :0]hwdata_que[$];			//write data
   bit [`DATA_WIDTH-1 :0]hrdata_que[$];			//read data
   
   constraint hsize_range {hsize inside {[0:2]};}
@@ -65,6 +65,13 @@ class AHB_trans;
     endcase
   endfunction
 
+  function void post_randomize();
+    int arr_size = calc_txf();
+    repeat(arr_size) begin
+      void'(std::randomize(hwdata));
+      hwdata_que.push_back(hwdata);
+    end
+  endfunction
 endclass
 
 `endif
