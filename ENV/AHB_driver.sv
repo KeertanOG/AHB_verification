@@ -84,11 +84,11 @@ class AHB_driver;
       if(trans_h.hwrite)
         vif.drv_cb.hwdata <= trans_h.hwdata_que.pop_front();                 //for the single burst type or first transfer of the burst type transaction
       trans_h.print("Driver");
-      if(trans_h3.calc_txf) begin
-        for(int i=0; i<trans_h3.calc_txf -1;i++) begin
+      if(trans_h.calc_txf) begin
+        for(int i=0; i<trans_h.calc_txf -1;i++) begin
           @(vif.drv_cb /*iff vif.drv_cb.hreadyout*/);
-          if(trans_h3.hwrite)
-            vif.drv_cb.hwdata <= trans_h3.hwdata_que.pop_front();
+          if(trans_h.hwrite)
+            vif.drv_cb.hwdata <= trans_h.hwdata_que.pop_front();
         end
       end
     end
