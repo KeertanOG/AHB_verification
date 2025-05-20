@@ -50,7 +50,7 @@ module AHB_tb_top;
     
     //connecting driver and monitor modports of interface to base test
     test.connect(AHB_inf_inst.MON_MP, AHB_inf_inst.DRV_MP);
-    
+    AHB_config::set_pipeline(1);
     test.run();
     #100 $finish;
   end

@@ -19,7 +19,7 @@ typedef enum bit[2:0] {SINGLE, INCR, WRAP4, INCR4, WRAP8, INCR8, WRAP16, INCR16}
 
 class AHB_trans;
   
-  rand bit [`ADDR_WIDTH-1:0]haddr;            //address bus
+  bit [`ADDR_WIDTH-1:0]haddr;            //address bus
   bit [1:0]htrans;                            //transaction type
   rand bit hwrite;                                 //transfer direction
   rand bit[2:0]hsize;                         //transfer size
@@ -36,7 +36,7 @@ class AHB_trans;
   bit [`ADDR_WIDTH-1: 0] haddr_que[$];
   
   //queue for storing write data and read data
-  rand bit [`DATA_WIDTH-1 :0]hwdata_que[$];			//write data
+  bit [`DATA_WIDTH-1 :0]hwdata_que[$];			//write data
   bit [`DATA_WIDTH-1 :0]hrdata_que[$];			//read data
   
   constraint hsize_range {hsize inside {[0:2]};}
@@ -67,9 +67,12 @@ class AHB_trans;
 
   function void post_randomize();
     int arr_size = calc_txf();
+    void'(std::randomize(haddr));
     repeat(arr_size) begin
       void'(std::randomize(hwdata));
       hwdata_que.push_back(hwdata);
+      haddr_que.push_back(haddr);
+      haddr=haddr+4;
     end
   endfunction
 endclass
