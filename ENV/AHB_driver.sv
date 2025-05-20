@@ -49,7 +49,6 @@ class AHB_driver;
     fork
       drive_control_signals(trans_h);
       drive_data_signals(trans_h);
-      end
     join_any
   endtask
 
@@ -71,9 +70,9 @@ class AHB_driver;
           @(vif.drv_cb /*iff vif.drv_cb.hreadyout*/);
           vif.drv_cb.haddr <= trans_h.haddr_que.pop_front();
           vif.drv_cb.htrans <= 2'b11;                             //htrans = SEQ 
+        end
       end
     end
-  end
   endtask
 
   task drive_data_signals(AHB_trans trans_h);                                //drives the data signals
