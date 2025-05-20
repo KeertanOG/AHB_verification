@@ -42,7 +42,7 @@ class AHB_trans;
   constraint hsize_range {hsize inside {[0:2]};}
   constraint align_address {haddr % (1 << hsize) == 0;}
   constraint priority_c {solve hburst_e before hsize;}
-  constraint size_limit_1kb {{2**hsize * calc_txf} inside {[0 : 1024]};}
+  constraint size_limit_1kb {{2**hsize * calc_txf()} inside {[0 : 1024]};}
 
 //write a constraint for 1kb limit
   function void print(string obj);
