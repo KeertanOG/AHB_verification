@@ -29,7 +29,7 @@ class AHB_mon;
   endfunction
   
   task run();
-    repeat(20) begin
+    forever begin
       trans_h=new();
       get_from_dut(trans_h);
       trans_h.print("Monitor");
