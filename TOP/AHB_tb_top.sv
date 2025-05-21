@@ -42,7 +42,7 @@ module AHB_tb_top;
     .HTRANS(inf.htrans),
     .HREADYOUT(iinf.hreadyout), 
     .HREADY(inf.hready), 
-    .HRESP(inf.hresp))
+    .HRESP(inf.hresp));
   
   //clock generation
   initial begin
