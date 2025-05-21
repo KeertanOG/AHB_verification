@@ -1,6 +1,6 @@
 
 compile:
-	vlog -coveropt 3 +cover +acc +incdir+../ENV +incdir+../TEST ../TEST/AHB_pkg.sv ../TOP/AHB_tb_top.sv
+	vlog -coveropt 3 +cover +acc +incdir+../ENV +incdir+../TEST ../TEST/AHB_pkg.sv ../TOP/AHB_tb_top.sv ../RTL/AHB_slave.svp
  
 sim:
 	@echo "Running with test $(TEST)"

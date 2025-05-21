@@ -26,7 +26,23 @@ module AHB_tb_top;
   logic hresetn;
   
   //AHB interface instance
-  AHB_inf AHB_inf_inst(hclk, hresetn);
+  AHB_inf inf(hclk, hresetn);
+  
+  //Design instantiation
+  ahb3liten DUT(.HRESETn(hresetn), 
+    .HCLK(hclk), 
+    .HSEL(inf.hsel), 
+    .HADDR(inf.haddr), 
+    .HWDATA(inf.hwdata), 
+    .HRDATA(inf.hrdata), 
+    .HWRITE(inf.hwrite), 
+    .HSIZE(inf.hsize), 
+    .HBURST(inf.hburst), 
+    .HPROT(inf.hprot), 
+    .HTRANS(inf.htrans),
+    .HREADYOUT(iinf.hreadyout), 
+    .HREADY(inf.hready), 
+    .HRESP(inf.hresp))
   
   //clock generation
   initial begin
@@ -49,7 +65,7 @@ module AHB_tb_top;
     test.build();
     
     //connecting driver and monitor modports of interface to base test
-    test.connect(AHB_inf_inst.MON_MP, AHB_inf_inst.DRV_MP);
+    test.connect(inf.MON_MP, inf.DRV_MP);
     AHB_config::set_pipeline(1);
     test.run();
     #100 $finish;
