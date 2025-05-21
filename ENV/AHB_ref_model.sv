@@ -41,9 +41,9 @@ class AHB_ref_model;
   endtask
 
   task predict_data(AHB_trans trans_h);
-    int btw_addr = 2**hsize;                    //in-between address count
+    int btw_addr = 2**trans_h.hsize;                    //in-between address count
     bit[`DATA_WIDTH-1 :0]temp_data;
-    for(int i=0; i<calc_txf; i++) begin         //calculating transaction size and no of transfers
+    for(int i=0; i<trans_h.calc_txf; i++) begin         //calculating transaction size and no of transfers
       if(trans_h.hwrite)
         temp_data = trans_h.hwdata_que.pop_front();
         for(int i=0; i<btw_addr;i++)
