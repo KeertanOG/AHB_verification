@@ -28,7 +28,6 @@ package AHB_pkg;
   `include "AHB_scb.sv"
   `include "AHB_env.sv"
   `include "AHB_base_test.sv"
-  `include "AHB_slave.svp"
 
  endpackage
 `endif
