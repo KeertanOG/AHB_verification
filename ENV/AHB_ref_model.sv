@@ -18,18 +18,43 @@
 class AHB_ref_model;
 
   mailbox #(AHB_trans) mon2ref;
-  mailbox #(AHB_trans) rm2scb;
+  mailbox #(AHB_trans) ref2scb;
+  //trasaction class handles
+  AHB_trans trans_h,trans_h2;
 
+  //memory for mimicing the design
+  [`MEM_WIDTH-1 : 0]mem[`MEM_DEPTH-1 : 0];
 
   function void connect(mailbox #(AHB_trans) mon2ref,
-                        mailbox #(AHB_trans) rm2scb);
+                        mailbox #(AHB_trans) ref2scb);
     this.mon2ref = mon2ref;
-    this.rm2scb = rm2scb;
+    this.ref2scb = ref2scb;
   endfunction
 
   task run();
-    //forever begin
-    //end
+    forever begin
+      mon2ref.get(trans_h);
+      trans_h2 = new trans_h;
+      predict_data(trans_h2);
+      ref2scb.put(trans_h2);
+    end
+  endtask
+
+  task predict_data(AHB_trans trans_h);
+    int btw_addr = 2**hsize;                    //in-between address count
+    bit[`DATA_WIDTH-1 :0]temp_data;
+    for(int i=0; i<calc_txf; i++) begin         //calculating transaction size and no of transfers
+      if(trans_h.hwrite)
+        temp_data = trans_h.hwdata_que.pop_front();
+        for(int i=0; i<btw_addr;i++)
+          mem[trans_h.haddr+j] = temp_data[(j*8)+:8];
+      end
+      else begin
+        for(int i=0; i<btw_addr;i++)
+          temp_data[(j*8)+:8] = mem[trans_h.haddr+j];
+        trans_h.hrdata_que.push_back(temp_data);
+      end
+    end
   endtask
 
 endclass

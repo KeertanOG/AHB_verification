@@ -18,7 +18,8 @@
 class AHB_scb;
 
   mailbox #(AHB_trans) mon2scb;
-  mailbox #(AHB_trans) rm2scb;
+  mailbox #(AHB_trans) ref2scb;
+  AHB_trans exp_data, act_data;
 
   function new();
     // Connect later
@@ -31,10 +32,24 @@ class AHB_scb;
   endfunction
 
   task run();
-   // forever begin
-      // Comparison logic here
-   // end
+    forever begin
+      mon2scb.get(act_data);
+      ref2scb.get(exp_data);
+      check_data(act_data,exp_data);
+      act_data.print("actual data");
+      exp_data.print("expected data");
+    end
   endtask
 
+  task check_data(AHB_trans act_trans, AHB_trans exp_trans)
+    if(act_trans.hrdata_que === exp_trans.hrdata_que)
+      $display("Testcase Pass");
+    else 
+      $error("***************Testcase Failed***************");
+  endtask
 endclass
 `endif
+
+
+//check if we need to compare the hready and hresp in scoreboard 
+//if required compare them
