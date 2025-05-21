@@ -10,6 +10,7 @@
 // guard statement to avoid multiple compilation of a file
 `ifndef AHB_INTERFACE_SV
 `define AHB_INTERFACE_SV
+`timescale 1ns/1ps
 interface AHB_inf(input logic hclk, input logic hresetn);
 
   // AHB-lite master signals
