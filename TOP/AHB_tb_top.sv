@@ -40,7 +40,7 @@ module AHB_tb_top;
     .HBURST(inf.hburst), 
     .HPROT(inf.hprot), 
     .HTRANS(inf.htrans),
-    .HREADYOUT(iinf.hreadyout), 
+    .HREADYOUT(inf.hreadyout), 
     .HREADY(inf.hready), 
     .HRESP(inf.hresp));
   
