@@ -23,7 +23,7 @@ class AHB_ref_model;
   AHB_trans trans_h,trans_h2;
 
   //memory for mimicing the design
-  [`MEM_WIDTH-1 : 0]mem[0:`MEM_DEPTH-1];
+  bit [`MEM_WIDTH-1 : 0]mem[0:`MEM_DEPTH-1];
 
   function void connect(mailbox #(AHB_trans) mon2ref,
                         mailbox #(AHB_trans) ref2scb);

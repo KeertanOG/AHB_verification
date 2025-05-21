@@ -65,7 +65,7 @@ class AHB_mon;
     trans_h.htrans = vif.mon_cb.htrans;
     trans_h.haddr_que.push_back(vif.mon_cb.haddr);
     if (trans_h.calc_txf > 1) begin
-      for(int i=0; i < trans_h.calc_txf - 1; i++) begin
+      for(int i=1; i < trans_h.calc_txf - 1; i++) begin
         @(vif.mon_cb);
         trans_h.haddr_que.push_back(vif.mon_cb.haddr);
         trans_h.htrans = vif.mon_cb.htrans;
@@ -80,7 +80,7 @@ class AHB_mon;
     else
       trans_h.hrdata_que.push_back(vif.mon_cb.hrdata);
     if (trans_h.calc_txf > 1) begin
-      for(int i=0; i < trans_h.calc_txf - 1; i++) begin
+      for(int i=1; i < trans_h.calc_txf - 1; i++) begin
         @(vif.mon_cb);
         if(vif.mon_cb.hwrite)
           trans_h.hwdata_que.push_back(vif.mon_cb.hwdata);
