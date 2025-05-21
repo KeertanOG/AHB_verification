@@ -50,7 +50,7 @@ class AHB_trans;
     $display("=======================================");
     $display("called %s at %0t",obj,$time);
     $display("| address | htrans | hwrite | hsize | hburst | hwdata | hrdata | hresp |");
-    $display("| %0d     | %0d    | %0d    | %0d   | %s    |  %0d   |   %0d  |  %0d  |", haddr, htrans, hwrite, hsize, hburst_e.name, hwdata, hrdata, hresp);
+    $display("| %p     | %0d    | %0d    | %0d   | %s    |  %p   |   %0d  |  %0d  |", haddr_que, htrans, hwrite, hsize, hburst_e.name, hwdata_que, hrdata, hresp);
     $display("=======================================");
   endfunction
   
