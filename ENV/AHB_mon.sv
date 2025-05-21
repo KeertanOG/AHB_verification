@@ -73,7 +73,7 @@ class AHB_mon;
   endtask
 
   task get_data_phase(AHB_trans trans_h);
-    repeat (2) @(vif.mon_cb iff vif.mon_cb.hreadyout);
+    repeat (2) @(vif.mon_cb iff vif.mon_cb.hready);
     if(vif.mon_cb.hwrite)
       trans_h.hwdata_que.push_back(vif.mon_cb.hwdata);
     else
