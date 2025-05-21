@@ -44,7 +44,7 @@ class AHB_ref_model;
     int btw_addr = 2**trans_h.hsize;                    //in-between address count
     bit[`DATA_WIDTH-1 :0]temp_data;
     for(int i=0; i<trans_h.calc_txf; i++) begin         //calculating transaction size and no of transfers
-      if(trans_h.hwrite)
+      if(trans_h.hwrite) begin
         temp_data = trans_h.hwdata_que.pop_front();
         for(int j=0; j<btw_addr;j++)
           mem[trans_h.haddr+j] = temp_data[(j*8)+:8];
