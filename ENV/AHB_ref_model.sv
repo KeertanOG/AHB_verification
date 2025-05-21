@@ -46,11 +46,11 @@ class AHB_ref_model;
     for(int i=0; i<trans_h.calc_txf; i++) begin         //calculating transaction size and no of transfers
       if(trans_h.hwrite)
         temp_data = trans_h.hwdata_que.pop_front();
-        for(int i=0; i<btw_addr;i++)
+        for(int j=0; j<btw_addr;j++)
           mem[trans_h.haddr+j] = temp_data[(j*8)+:8];
       end
       else begin
-        for(int i=0; i<btw_addr;i++)
+        for(int j=0; j<btw_addr;j++)
           temp_data[(j*8)+:8] = mem[trans_h.haddr+j];
         trans_h.hrdata_que.push_back(temp_data);
       end
