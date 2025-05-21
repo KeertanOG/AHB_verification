@@ -26,9 +26,9 @@ class AHB_scb;
   endfunction
 
   function void connect(mailbox #(AHB_trans) mon2scb,
-                        mailbox #(AHB_trans) rm2scb);
+                        mailbox #(AHB_trans) ref2scb);
     this.mon2scb = mon2scb;
-    this.rm2scb = rm2scb;
+    this.ref2scb = ref2scb;
   endfunction
 
   task run();
