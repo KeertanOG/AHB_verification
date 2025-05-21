@@ -33,7 +33,7 @@ class AHB_mon;
     repeat(20) begin
       trans_h=new();
       get_from_dut(trans_h);
-      //trans_h.print("Monitor");
+      trans_h.print("Monitor");
       mon2ref.put(trans_h);
       mon2scb.put(trans_h);
     end
