@@ -40,7 +40,8 @@ class AHB_trans;
   
   constraint hsize_range {hsize inside {[0:2]};}
   constraint align_address {
-   soft haddr[0] % (1 << hsize) == 0;}                       //constraint for address alignment with hsize
+    //haddr[0] % (1 << hsize) == 0;
+    haddr[0] == 'h20;}                       //constraint for address alignment with hsize
   constraint priority_c {
     solve hburst_e before hsize;      //for 1kb limit
     solve hburst_e before haddr;

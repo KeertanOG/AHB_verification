@@ -27,7 +27,7 @@ class AHB_gen;
   repeat(1) begin
     trans_h =new();
     trans_copy = new trans_h;
-    void'(trans_h.randomize() with {hburst_e == INCR4; haddr[0] == 'h20; hsize == 2; hwrite == 1;});
+    void'(trans_h.randomize() with {hburst_e == INCR4; hsize == 2; hwrite == 1;});
     gen2drv.put(trans_h);
     trans_h.print("Generator"); 
     // #10;
@@ -35,7 +35,7 @@ class AHB_gen;
   repeat(1) begin
     trans_h =new();
     trans_copy = new trans_h;
-    void'(trans_h.randomize() with {hburst_e == INCR4; haddr[0] == 'h20; hsize == 2; hwrite == 0;});
+    void'(trans_h.randomize() with {hburst_e == INCR4; hsize == 2; hwrite == 0;});
     gen2drv.put(trans_h);
     trans_h.print("Generator"); 
     // #10;
