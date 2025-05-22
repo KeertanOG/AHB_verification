@@ -72,13 +72,13 @@ constraint hwdata_values{
     $display("--------------------------------------------------------------");
     $display(" Called by         : %0s ", obj);
     $display(" Time              : %0t ", $time);
-    $display(" HTRANS            : %0d", htrans);
+    $display(" HTRANS            : %p", htrans);
     $display(" HBURST            : %0s ", hburst_e.name());
     $display(" HSIZE             : %0d", hsize);
-    $display(" HADDR            : %0p", haddr_que);
+    $display(" HADDR            : %0p", haddr);
     $display(" HWRITE            : %0d", hwrite);
-    $display(" HWDATA            : %0p", hwdata_que);
-    $display(" HRDATA            : %0p", hrdata_que);
+    $display(" HWDATA            : %0p", hwdata);
+    $display(" HRDATA            : %0p", hrdata);
     $display(" HPROT             : %0d", hprot);
     $display(" HRESP             : %0d", hresp);
     $display("--------------------------------------------------------------");  
