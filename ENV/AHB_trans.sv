@@ -36,7 +36,7 @@ class AHB_trans;
 
   //local variables for genetaing data
   local rand int limit;
-  local rand int undef_incr;
+  local rand int length;
   
   constraint hsize_range {hsize inside {[0:2]};}
   constraint align_address {
@@ -53,13 +53,13 @@ class AHB_trans;
   
 constraint arr_size_define {
   if(hburst_e == SINGLE) haddr.size() == 1;
-  else if (hburst_e == WRAP4 || hburst_e == INCR4) {haddr.size() == 4; hwdata.size() == 4}
-  else if (hburst_e == WRAP8 || hburst_e == INCR8) {haddr.size() == 8; hwdata.size() == 8;}
-  else if (hburst_e == WRAP16 || hburst_e == INCR16) {haddr.size() == 16; hwdata.size() == 16;}
+  else if (hburst_e == WRAP4 || hburst_e == INCR4) length == 4;
+  else if (hburst_e == WRAP8 || hburst_e == INCR8) length == 8;
+  else if (hburst_e == WRAP16 || hburst_e == INCR16) length == 16;
 
-  if(hburst_e == INCR) undef_incr inside {[1:25]};          //temporary
-  hwdata.size() == undef_incr;
-  haddr.size() == undef_incr;
+  if(hburst_e == INCR) length inside {[1:25]};          //temporary
+  hwdata.size() == length;
+  haddr.size() == length;
 }
 
 constraint hwdata_values{
