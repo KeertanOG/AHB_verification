@@ -63,6 +63,7 @@ class AHB_mon;
     //trans_h.hresetn = vif.mon_cb.hresetn;
     trans_h.hsize  = vif.mon_cb.hsize;
     trans_h.htrans = vif.mon_cb.htrans;
+    trans_h.hprot = vif.mon_cb.hprot;
     trans_h.haddr_que.push_back(vif.mon_cb.haddr);
     if (trans_h.calc_txf > 1) begin
       for(int i=1; i < trans_h.calc_txf - 1; i++) begin

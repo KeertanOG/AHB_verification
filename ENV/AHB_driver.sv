@@ -137,10 +137,11 @@ class AHB_driver;
     vif.drv_cb.hwrite <= trans_h2.hwrite;
     vif.drv_cb.hsize <= trans_h2.hsize;
     vif.drv_cb.hburst <= int'(trans_h2.hburst_e);
-    vif.drv_cb.htrans <= trans_h2.htrans;                       //for single burst type or the first transfer of burst type transaction
+    vif.drv_cb.htrans <= trans_h2.htrans;                   //for single burst type or the first transfer of burst type transaction
+    vif.drv_cb.hprot <= 3'bxxx;                             //default value 
     vif.drv_cb.haddr <= trans_h2.haddr_que.pop_front();
 
-    if(trans_h2.calc_txf > 1) begin                             //for burst type transfers
+    if(trans_h2.calc_txf > 1) begin                         //for burst type transfers
       for(int i = 1; i < trans_h2.calc_txf -1; i++) begin
         @(vif.drv_cb);
         vif.drv_cb.haddr <= trans_h2.haddr_que.pop_front();

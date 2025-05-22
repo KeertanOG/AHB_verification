@@ -31,13 +31,13 @@ interface AHB_inf(input logic hclk, input logic hresetn);
  clocking drv_cb @(posedge hclk);
     default input #1 output #1;
     input hresetn, hready, hresp, hrdata,hreadyout;
-    output hsel,hwrite, haddr, hwdata, htrans, hsize, hburst;
+    output hsel,hwrite, haddr, hwdata, htrans, hsize, hburst, hprot;
   endclocking
   
   //clocking block for monitor 
   clocking mon_cb @(posedge hclk);
     default input #1 output #1;
-    input hresetn, hsel, hready, hresp, hwrite, haddr, hwdata, hrdata, htrans, hsize, hburst,hreadyout;
+    input hresetn, hsel, hready, hresp, hwrite, haddr, hwdata, hrdata, htrans, hsize, hburst,hreadyout, hprot;
   endclocking
 
   modport DRV_MP (clocking drv_cb, input hclk);

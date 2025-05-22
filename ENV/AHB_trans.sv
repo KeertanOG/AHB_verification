@@ -19,19 +19,19 @@ typedef enum bit[2:0] {SINGLE, INCR, WRAP4, INCR4, WRAP8, INCR8, WRAP16, INCR16}
 
 class AHB_trans;
   
-  bit [`ADDR_WIDTH-1:0]haddr;            //address bus
+  bit [`ADDR_WIDTH-1:0]haddr;                 //address bus
   bit [1:0]htrans;                            //transaction type
-  rand bit hwrite;                                 //transfer direction
+  rand bit hwrite;                            //transfer direction
   rand bit[2:0]hsize;                         //transfer size
-  //bit[2:0]hburst;                             //burst type
-  bit [`DATA_WIDTH-1:0]hwdata;           //write data
+  //bit[2:0]hburst;                           //burst type
+  bit [`DATA_WIDTH-1:0]hwdata;                //write data
+  bit [3:0]hprot;                             //protect signal
 
   //slave output signals
   bit [31:0]hrdata;                           //read data
-  bit hready;                                 //transfer status signal
-  bit[1:0] hresp;                             //response signal
+  bit hresp;                                  //slave response signal
   
-  rand burst_type hburst_e;                        //enum instantiation of hburst_type enum
+  rand burst_type hburst_e;                   //enum instantiation of hburst_type enum
   //queue for storing addresses of the burst transaction
   bit [`ADDR_WIDTH-1: 0] haddr_que[$];
   
@@ -44,16 +44,23 @@ class AHB_trans;
   constraint priority_c {solve hburst_e before hsize;}
   constraint size_limit_1kb {{2**hsize * calc_txf()} inside {[0 : 1024]};}
 
-//write a constraint for 1kb limit
   function void print(string obj);
-    $display("                                       ");
-    $display("=======================================");
-    $display("called %s at %0t",obj,$time);
-    $display("| address | htrans | hwrite | hsize | hburst | hwdata | hrdata | hresp |");
-    $display("| %p     | %0d    | %0d    | %0d   | %s    |  %p   |   %p  |  %0d  |", haddr_que, htrans, hwrite, hsize, hburst_e.name, hwdata_que, hrdata_que, hresp);
-    $display("=======================================");
-  endfunction
-  
+    $display("--------------------------------------------------------------");
+    $display(" Called by         : %0s ", obj);
+    $display(" Time              : %0t ", $time);
+    $display(" HTRANS            : %0d", htrans);
+    $display(" HBURST            : %0s ", hburst_e.name());
+    $display(" HSIZE             : %0d", hsize);
+    $display(" HADDR             : %0p", haddr_que);
+    $display(" HWRITE            : %0d", hwrite);
+    $display(" HWDATA            : %0p", hwdata_que);
+    $display(" HRDATA            : %0p", hrdata_que);
+    $display(" HPROT             : %0d", hprot);
+    $display(" HRESP             : %0d", hresp);
+    $display("--------------------------------------------------------------");  
+
+   endfunction
+ 
   //function for calculating number of transfers in a transaction
   function int calc_txf();
     case(this.hburst_e)
@@ -78,5 +85,4 @@ class AHB_trans;
 endclass
 
 `endif
-//remove hsel from transaction class
 //why can't we extend the address phase
