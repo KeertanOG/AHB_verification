@@ -32,7 +32,8 @@ class AHB_ref_model;
   endfunction
 
   task run();
-    forever begin
+    repeat(5) begin
+   // forever begin
       mon2ref.get(trans_h);
       trans_h2 = new trans_h;
       predict_data(trans_h2);

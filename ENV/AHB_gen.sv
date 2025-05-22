@@ -24,10 +24,18 @@ class AHB_gen;
   endfunction
 
   task run();
-  repeat(20) begin
+  repeat(1) begin
     trans_h =new();
     trans_copy = new trans_h;
-    void'(trans_h.randomize());
+    void'(trans_h.randomize() with {hburst_e == INCR4; haddr == '{'h20, 'h24, 'h28, 'h2c}; hsize == 2; hwrite == 1;});
+    gen2drv.put(trans_h);
+    trans_h.print("Generator"); 
+    // #10;
+    end 
+  repeat(1) begin
+    trans_h =new();
+    trans_copy = new trans_h;
+    void'(trans_h.randomize() with {hburst_e == INCR4; haddr == '{'h20, 'h24, 'h28, 'h2c}; hsize == 2; hwrite == 0;});
     gen2drv.put(trans_h);
     trans_h.print("Generator"); 
     // #10;

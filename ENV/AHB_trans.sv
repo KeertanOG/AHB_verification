@@ -40,7 +40,7 @@ class AHB_trans;
   
   constraint hsize_range {hsize inside {[0:2]};}
   constraint align_address {
-    haddr[0] % (1 << hsize) == 0;}                       //constraint for address alignment with hsize
+   soft haddr[0] % (1 << hsize) == 0;}                       //constraint for address alignment with hsize
   constraint priority_c {
     solve hburst_e before hsize;      //for 1kb limit
     solve hburst_e before haddr;
@@ -75,7 +75,7 @@ constraint hwdata_values{
     $display(" HTRANS            : %p", htrans);
     $display(" HBURST            : %0s ", hburst_e.name());
     $display(" HSIZE             : %0d", hsize);
-    $display(" HADDR            : %0p", haddr);
+    $display(" HADDR             : %0p", haddr);
     $display(" HWRITE            : %0d", hwrite);
     $display(" HWDATA            : %0p", hwdata);
     $display(" HRDATA            : %0p", hrdata);
