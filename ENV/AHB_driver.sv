@@ -137,15 +137,15 @@ class AHB_driver;
     vif.drv_cb.hwrite <= trans_h2.hwrite;
     vif.drv_cb.hsize <= trans_h2.hsize;
     vif.drv_cb.hburst <= int'(trans_h2.hburst_e);
-    vif.drv_cb.htrans <= trans_h2.htrans;                   //for single burst type or the first transfer of burst type transaction
-    vif.drv_cb.hprot <= 3'bxxx;                             //default value 
-    vif.drv_cb.haddr <= trans_h2.haddr_que.pop_front();
+    vif.drv_cb.htrans <= trans_h2.htrans.pop_front();                   //for single burst type or the first transfer of burst type transaction
+    vif.drv_cb.hprot <= 4'bxxxx;                             //default value 
+    vif.drv_cb.haddr <= trans_h2.haddr.pop_front();
 
     if(trans_h2.calc_txf > 1) begin                         //for burst type transfers
       for(int i = 1; i < trans_h2.calc_txf -1; i++) begin
         @(vif.drv_cb);
-        vif.drv_cb.haddr <= trans_h2.haddr_que.pop_front();
-        vif.drv_cb.htrans <= trans_h2.htrans;
+        vif.drv_cb.haddr <= trans_h2.haddr.pop_front();
+        vif.drv_cb.htrans <= trans_h2.htrans.pop_front();
       end
     end
   endtask
@@ -156,13 +156,13 @@ class AHB_driver;
     trans_h3 = data_phase_que.pop_front();
 
     if(trans_h3.hwrite)
-      vif.drv_cb.hwdata <= trans_h3.hwdata_que.pop_front();                 //for the single burst type or first transfer of the burst type transaction
+      vif.drv_cb.hwdata <= trans_h3.hwdata.pop_front();                 //for the single burst type or first transfer of the burst type transaction
 
     if(trans_h3.calc_txf) begin
       for(int i=1; i<trans_h3.calc_txf -1;i++) begin
         @(vif.drv_cb);
         if(trans_h3.hwrite)
-          vif.drv_cb.hwdata <= trans_h3.hwdata_que.pop_front();
+          vif.drv_cb.hwdata <= trans_h3.hwdata.pop_front();
       end
     end
   endtask
@@ -207,3 +207,5 @@ class AHB_driver;
 endclass
 
 `endif
+
+//add the check of hready

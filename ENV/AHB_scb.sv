@@ -42,8 +42,8 @@ class AHB_scb;
   endtask
 
   task check_data(AHB_trans act_trans, AHB_trans exp_trans);
-    if(act_trans.hrdata_que === exp_trans.hrdata_que)
-      $display("Testcase Pass");
+    if(act_trans.hrdata === exp_trans.hrdata)
+      $info("Testcase Pass");
     else 
       $error("***************Testcase Failed***************");
   endtask

@@ -19,30 +19,54 @@ typedef enum bit[2:0] {SINGLE, INCR, WRAP4, INCR4, WRAP8, INCR8, WRAP16, INCR16}
 
 class AHB_trans;
   
-  bit [`ADDR_WIDTH-1:0]haddr;                 //address bus
-  bit [1:0]htrans;                            //transaction type
+ rand bit [`ADDR_WIDTH-1:0]haddr[$];                 //address bus (taken as array to generate all the addresses for the burst transaction)
+  bit [1:0]htrans[$];                            //transaction type
   rand bit hwrite;                            //transfer direction
   rand bit[2:0]hsize;                         //transfer size
   //bit[2:0]hburst;                           //burst type
-  bit [`DATA_WIDTH-1:0]hwdata;                //write data
+  rand bit [`DATA_WIDTH-1:0]hwdata[$];                //write data (taken as array to randomize all the data for the burst transaction)
   bit [3:0]hprot;                             //protect signal
 
   //slave output signals
-  bit [31:0]hrdata;                           //read data
+  bit [31:0]hrdata[$];                           //read data
   bit hresp;                                  //slave response signal
   
   rand burst_type hburst_e;                   //enum instantiation of hburst_type enum
-  //queue for storing addresses of the burst transaction
-  bit [`ADDR_WIDTH-1: 0] haddr_que[$];
-  
-  //queue for storing write data and read data
-  bit [`DATA_WIDTH-1 :0]hwdata_que[$];			//write data
-  bit [`DATA_WIDTH-1 :0]hrdata_que[$];			//read data
+
+
+  //local variables for genetaing data
+  local rand int limit;
+  local rand int undef_incr;
   
   constraint hsize_range {hsize inside {[0:2]};}
-  constraint align_address {haddr % (1 << hsize) == 0;}
-  constraint priority_c {solve hburst_e before hsize;}
-  constraint size_limit_1kb {{2**hsize * calc_txf()} inside {[0 : 1024]};}
+  constraint align_address {
+    haddr % (1 << hsize) == 0;}                       //constraint for address alignment with hsize
+  constraint priority_c {
+    solve hburst_e before hsize;      //for 1kb limit
+    solve hburst_e before haddr;
+    solve hburst_e before hwdata;
+    solve hwrite before hwdata;
+}
+  constraint size_limit_1kb {
+    {2**hsize * calc_txf()} inside {[0 : 1024]};      //limiting the single transaction to 1kb  
+}
+  
+constraint arr_size_define {
+  if(hburst_e == SINGLE) haddr.size() == 1;
+  else if (hburst_e == WRAP4 || hburst_e == INCR4) {haddr.size() == 4; hwdata.size() == 4}
+  else if (hburst_e == WRAP8 || hburst_e == INCR8) {haddr.size() == 8; hwdata.size() == 8;}
+  else if (hburst_e == WRAP16 || hburst_e == INCR16) {haddr.size() == 16; hwdata.size() == 16;}
+
+  if(hburst_e == INCR) undef_incr inside {[1:25]};          //temporary
+  hwdata.size() == undef_incr;
+  haddr.size() == undef_incr;
+}
+
+constraint hwdata_values{
+  foreach(hwdata[i]) {
+    limit == (2**(8*(hsize+1))) - hwdata[i] inside {[0:limit-1]};
+  }
+}
 
   function void print(string obj);
     $display("--------------------------------------------------------------");
@@ -51,7 +75,7 @@ class AHB_trans;
     $display(" HTRANS            : %0d", htrans);
     $display(" HBURST            : %0s ", hburst_e.name());
     $display(" HSIZE             : %0d", hsize);
-    $display(" HADDR             : %0p", haddr_que);
+    $display(" HADDR            : %0p", haddr_que);
     $display(" HWRITE            : %0d", hwrite);
     $display(" HWDATA            : %0p", hwdata_que);
     $display(" HRDATA            : %0p", hrdata_que);
@@ -73,14 +97,19 @@ class AHB_trans;
   endfunction
 
   function void post_randomize();
-    int arr_size = calc_txf();
-    void'(std::randomize(haddr));
-    repeat(arr_size) begin
-      void'(std::randomize(hwdata));
-      hwdata_que.push_back(hwdata);
-      haddr_que.push_back(haddr);
-      haddr=haddr+4;
+    for(int i=1; i<haddr.size;i++) begin
+      haddr[i] = haddr[i-1] + (2**hsize);
     end
+
+    //htrans = new[length];
+    //htrans[0] = 2'b10;
+    htrans.push_back(2'b10);
+    for(int i = 1; i<length-1; i++)
+      htrans.push_back(2'b11);
+    if(hburst_e == INCR)
+      htrans.push_back(2'b10);
+    else 
+      htrans.push_back(2'b11);
   endfunction
 endclass
 

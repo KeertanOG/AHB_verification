@@ -40,8 +40,8 @@ module AHB_tb_top;
     .HBURST(inf.hburst), 
     .HPROT(inf.hprot), 
     .HTRANS(inf.htrans),
-    .HREADYOUT(inf.hreadyout), 
-    .HREADY(inf.hready), 
+    .HREADYOUT(inf.hready), 
+    .HREADY(1), 
     .HRESP(inf.hresp));
   
   //clock generation
