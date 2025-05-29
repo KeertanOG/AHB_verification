@@ -31,11 +31,18 @@ class AHB_mon;
   task run();
 //    forever begin
     repeat(20) begin
-      trans_h=new();
-      get_from_dut(trans_h);
-      trans_h.print("Monitor");
-      mon2ref.put(trans_h);
-      mon2scb.put(trans_h);
+      fork
+        begin
+          trans_h=new();
+          get_from_dut(trans_h);
+          trans_h.print("Monitor");
+          mon2ref.put(trans_h);
+          mon2scb.put(trans_h);
+        end
+        wait_reset_assert();
+      join_any
+      disable fork;
+      wait_reset_release();
     end
   endtask
   
@@ -47,7 +54,7 @@ class AHB_mon;
   endtask
 
   task get_addr_phase(AHB_trans trans_h);
-    @(vif.mon_cb /*iff vif.mon_cb.hreadyout*/);
+    @(vif.mon_cb iff vif.mon_cb.hready);
     case (vif.mon_cb.hburst)
       3'b000:trans_h.hburst_e = SINGLE;
       3'b001:trans_h.hburst_e = INCR;
@@ -66,8 +73,8 @@ class AHB_mon;
     trans_h.hprot = vif.mon_cb.hprot;
     trans_h.haddr.push_back(vif.mon_cb.haddr);
     if (trans_h.calc_txf > 1) begin
-      for(int i=1; i < trans_h.calc_txf - 1; i++) begin
-        @(vif.mon_cb);
+      for(int i=1; i < trans_h.calc_txf; i++) begin
+    @(vif.mon_cb iff vif.mon_cb.hready);
         trans_h.haddr.push_back(vif.mon_cb.haddr);
         trans_h.htrans.push_back(vif.mon_cb.htrans);
       end
@@ -81,8 +88,8 @@ class AHB_mon;
     else
       trans_h.hrdata.push_back(vif.mon_cb.hrdata);
     if (trans_h.calc_txf > 1) begin
-      for(int i=1; i < trans_h.calc_txf - 1; i++) begin
-        @(vif.mon_cb);
+      for(int i=1; i < trans_h.calc_txf; i++) begin
+        @(vif.mon_cb iff vif.mon_cb.hready);
         if(vif.mon_cb.hwrite)
           trans_h.hwdata.push_back(vif.mon_cb.hwdata);
         else
@@ -91,7 +98,14 @@ class AHB_mon;
     end
     trans_h.print("Monitor");
   endtask
+
+  task wait_reset_release();
+    wait(vif.mon_cb.hresetn == 1);
+  endtask
   
+  task wait_reset_assert();
+    wait(vif.mon_cb.hresetn == 0);
+  endtask
 
 endclass
 

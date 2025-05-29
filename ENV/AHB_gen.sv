@@ -15,7 +15,7 @@
 `ifndef AHB_GEN_SV
 `define AHB_GEN_SV
 
-class AHB_gen;
+virtual class AHB_gen;
 
   mailbox #(AHB_trans) gen2drv;
   AHB_trans trans_h,trans_copy;
@@ -23,24 +23,24 @@ class AHB_gen;
     this.gen2drv = gen2drv;
   endfunction
 
-  task run();
-  repeat(1) begin
-    trans_h =new();
-    trans_copy = new trans_h;
-    void'(trans_h.randomize() with {hburst_e == INCR4; hsize == 2; hwrite == 1;});
-    gen2drv.put(trans_h);
-    trans_h.print("Generator"); 
-    // #10;
-    end 
-  repeat(1) begin
-    trans_h =new();
-    trans_copy = new trans_h;
-    void'(trans_h.randomize() with {hburst_e == INCR4; hsize == 2; hwrite == 0;});
-    gen2drv.put(trans_h);
-    trans_h.print("Generator"); 
-    // #10;
-    end 
-  endtask
+  pure virtual task run();
+//  repeat(1) begin
+//    trans_h =new();
+//    trans_copy = new trans_h;
+//    void'(trans_h.randomize() with {hburst_e == INCR4; hsize == 2; hwrite == 1;});
+//    gen2drv.put(trans_h);
+//    trans_h.print("Generator"); 
+//    // #10;
+//    end 
+//  repeat(1) begin
+//    trans_h =new();
+//    trans_copy = new trans_h;
+//    void'(trans_h.randomize() with {hburst_e == INCR4; hsize == 2; hwrite == 0;});
+//    gen2drv.put(trans_h);
+//    trans_h.print("Generator"); 
+//    // #10;
+//    end 
+//  endtask
 
 endclass
 `endif

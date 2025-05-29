@@ -19,12 +19,12 @@ typedef enum bit[2:0] {SINGLE, INCR, WRAP4, INCR4, WRAP8, INCR8, WRAP16, INCR16}
 
 class AHB_trans;
   
- rand bit [`ADDR_WIDTH-1:0]haddr[$];                 //address bus (taken as array to generate all the addresses for the burst transaction)
-  bit [1:0]htrans[$];                            //transaction type
+ /*rand*/ bit [`ADDR_WIDTH-1:0]haddr[$];                 //address bus (taken as array to generate all the addresses for the burst transaction)
+  bit [1:0]htrans[$];                         //transaction type
   rand bit hwrite;                            //transfer direction
   rand bit[2:0]hsize;                         //transfer size
   //bit[2:0]hburst;                           //burst type
-  rand bit [`DATA_WIDTH-1:0]hwdata[$];                //write data (taken as array to randomize all the data for the burst transaction)
+  /*rand*/ bit [`DATA_WIDTH-1:0]hwdata[$];                //write data (taken as array to randomize all the data for the burst transaction)
   bit [3:0]hprot;                             //protect signal
 
   //slave output signals
@@ -39,14 +39,14 @@ class AHB_trans;
   local rand int length;
   
   constraint hsize_range {hsize inside {[0:2]};}
-  constraint align_address {
-    //haddr[0] % (1 << hsize) == 0;
-    haddr[0] == 'h20;}                       //constraint for address alignment with hsize
+//  constraint align_address {
+//    //haddr[0] % (1 << hsize) == 0;
+//    haddr[0] == 'h20;}                       //constraint for address alignment with hsize
   constraint priority_c {
     solve hburst_e before hsize;      //for 1kb limit
     solve hburst_e before haddr;
-    solve hburst_e before hwdata;
-    solve hwrite before hwdata;
+//    solve hburst_e before hwdata;
+//    solve hwrite before hwdata;
 }
   constraint size_limit_1kb {
     {2**hsize * calc_txf()} inside {[0 : 1024]};      //limiting the single transaction to 1kb  
@@ -58,16 +58,16 @@ constraint arr_size_define {
   else if (hburst_e == WRAP8 || hburst_e == INCR8) length == 8;
   else if (hburst_e == WRAP16 || hburst_e == INCR16) length == 16;
 
-  if(hburst_e == INCR) length inside {[1:25]};          //temporary
-  hwdata.size() == length;
-  haddr.size() == length;
+//  if(hburst_e == INCR) length inside {[1:25]};          //temporary
+//  hwdata.size() == length;
+//  haddr.size() == length;
 }
 
-constraint hwdata_values{
-  foreach(hwdata[i]) {
-    limit == (2**(8*(hsize+1))) - hwdata[i] inside {[0:limit-1]};
-  }
-}
+//constraint hwdata_values{
+//  foreach(hwdata[i]) {
+//    limit == (2**(8*(hsize+1))) - hwdata[i] inside {[0:limit-1]};
+//  }
+//}
 
   function void print(string obj);
     $display("--------------------------------------------------------------");
@@ -98,9 +98,9 @@ constraint hwdata_values{
   endfunction
 
   function void post_randomize();
-    for(int i=1; i<haddr.size;i++) begin
-      haddr[i] = haddr[i-1] + (2**hsize);
-    end
+//    for(int i=1; i<haddr.size;i++) begin
+//      haddr[i] = haddr[i-1] + (2**hsize);
+//    end
 
     //htrans = new[length];
     //htrans[0] = 2'b10;

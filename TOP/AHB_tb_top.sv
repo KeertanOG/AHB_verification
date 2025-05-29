@@ -51,12 +51,12 @@ module AHB_tb_top;
   end
   
   //reset generation
- /* initial begin				//initial reset condition
+  initial begin				//initial reset condition
     hresetn = 0;
-    repeat(2) (posedge hclk);
+    repeat(2) @(posedge hclk);
     hresetn = 1;
   end
- */ 
+  
   
   //instantiate and connect the testbench
   initial begin

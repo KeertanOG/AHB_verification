@@ -23,11 +23,19 @@ class AHB_base_test;
   // Environment handle
   AHB_env env;
 
+  //testcase handle
+  AHB_write_read wr_h;
+
   // Build phase - instantiate and configure environment
   function void build();
     env = new();
     env.build();
-    $display("Build called");
+
+    if($test$plusargs("WRITE_READ")) begin
+      wr_h = new();
+      env.gen = wr_h;
+    end
+    //$display("Build called");
   endfunction
 
   // Connect phase - bind interfaces to environment

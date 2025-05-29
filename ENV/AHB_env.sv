@@ -37,7 +37,7 @@ class AHB_env;
     mon2scb = new();
     mon2ref = new();
     rm2scb = new();
-    gen = new();
+  //  gen = new();
     drv = new();
     mon = new();
     ref_env = new();

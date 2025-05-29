@@ -3,9 +3,9 @@
 // Engineer: Keertan Patel
 // 
 // Create Date: 4.5.2025 10:41:16
-// Module Name: AHB_driver
+// Module Name: AHB_config 
 // Project Name: AHB slave verification 
-// Description: driver file
+// Description: configure file to configure pipelined or non-pipelined
 //
 // v1.0 - File Created
 ///////////////////////////////////////

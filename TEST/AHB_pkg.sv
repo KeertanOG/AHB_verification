@@ -27,6 +27,7 @@ package AHB_pkg;
   `include "AHB_ref_model.sv"
   `include "AHB_scb.sv"
   `include "AHB_env.sv"
+  `include "AHB_write_read.sv"
   `include "AHB_base_test.sv"
 
  endpackage
