@@ -46,7 +46,7 @@ class AHB_driver;
         //drive_control_io();                       //drives the control signals of AHB
         //drive_data_in();                          //drives the data signal of AHB
       join_any
-      disable fork;
+     // disable fork;                               //creating problem does not allow mulitple transaction
       wait_reset_release();
     end
   endtask
@@ -92,7 +92,6 @@ class AHB_driver;
 
     if(trans_h.hwrite)
       vif.drv_cb.hwdata <= trans_h.hwdata.pop_front();                 //for the single burst type or first transfer of the burst type transaction
-    trans_h.print("Driver");
     if(trans_h.calc_txf > 1) begin
       for(int i=1; i<trans_h.calc_txf;i++) begin
         @(vif.drv_cb iff vif.drv_cb.hready);
