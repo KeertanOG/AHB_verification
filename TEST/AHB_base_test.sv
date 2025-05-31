@@ -25,15 +25,21 @@ class AHB_base_test;
 
   //testcase handle
   AHB_write_read wr_h;
+  AHB_back2back b2b_h;
 
   // Build phase - instantiate and configure environment
   function void build();
     env = new();
     env.build();
 
-    if($test$plusargs("WRITE_READ")) begin
+    if($test$plusargs("WRITE_READ")) begin            //targeted write and read testcase
       wr_h = new();
       env.gen = wr_h;
+    end
+
+    if($test$plusargs("BACK2BACK")) begin
+      b2b_h = new();
+      env.gen = b2b_h;
     end
     //$display("Build called");
   endfunction

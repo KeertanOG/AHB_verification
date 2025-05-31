@@ -63,8 +63,8 @@ class AHB_driver;
       vif.drv_cb.htrans <= 0;
     end
     else begin
-      @(vif.drv_cb iff vif.drv_cb.hready);
       wait(addr_phase_que.size != 0);                         //checking if the addr phase data present or not
+      @(vif.drv_cb iff vif.drv_cb.hready);
       trans_h=addr_phase_que.pop_front();
       trans_h.print("Driver");
       vif.drv_cb.hsel <= 1'b1;
@@ -86,8 +86,8 @@ class AHB_driver;
   endtask
 
   task drive_data_signals(AHB_trans trans_h);                                //drives the data signals
-    repeat(2) @(vif.drv_cb iff vif.drv_cb.hready);
     wait(data_phase_que.size != 0);                         //checking if the data phase data present or not
+    repeat(2) @(vif.drv_cb iff vif.drv_cb.hready);
     trans_h = data_phase_que.pop_front();
 
     if(trans_h.hwrite)

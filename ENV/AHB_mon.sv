@@ -41,7 +41,7 @@ class AHB_mon;
         end
         wait_reset_assert();
       join_any
-      disable fork;
+//      disable fork;
       wait_reset_release();
     end
   endtask
