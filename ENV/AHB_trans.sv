@@ -54,7 +54,7 @@ class AHB_trans;
 }
   
 constraint arr_size_define {
-  if(hburst_e == SINGLE) haddr.size() == 1;
+  if(hburst_e == SINGLE) length == 1;
   else if (hburst_e == WRAP4 || hburst_e == INCR4) length == 4;
   else if (hburst_e == WRAP8 || hburst_e == INCR8) length == 8;
   else if (hburst_e == WRAP16 || hburst_e == INCR16) length == 16;

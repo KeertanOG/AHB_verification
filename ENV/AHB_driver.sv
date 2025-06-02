@@ -64,7 +64,8 @@ class AHB_driver;
     end
     else begin
       wait(addr_phase_que.size != 0);                         //checking if the addr phase data present or not
-      @(vif.drv_cb iff vif.drv_cb.hready);
+      iff(vif.drv_cb.hready);
+      @(vif.drv_cb);
       trans_h=addr_phase_que.pop_front();
       trans_h.print("Driver");
       vif.drv_cb.hsel <= 1'b1;
@@ -77,7 +78,8 @@ class AHB_driver;
   
       if(trans_h.calc_txf > 1) begin                             //for burst type transfers
         for(int i = 1; i < trans_h.calc_txf; i++) begin
-          @(vif.drv_cb iff vif.drv_cb.hready);
+          iff(vif.drv_cb.hready);
+          @(vif.drv_cb);
           vif.drv_cb.haddr <= trans_h.haddr.pop_front();
           vif.drv_cb.htrans <= trans_h.htrans.pop_front();                             //htrans = SEQ 
         end
@@ -87,14 +89,16 @@ class AHB_driver;
 
   task drive_data_signals(AHB_trans trans_h);                                //drives the data signals
     wait(data_phase_que.size != 0);                         //checking if the data phase data present or not
-    repeat(2) @(vif.drv_cb iff vif.drv_cb.hready);
+    iff(vif.drv.hready);
+    repeat(1) @(vif.drv_cb);
     trans_h = data_phase_que.pop_front();
 
     if(trans_h.hwrite)
       vif.drv_cb.hwdata <= trans_h.hwdata.pop_front();                 //for the single burst type or first transfer of the burst type transaction
     if(trans_h.calc_txf > 1) begin
       for(int i=1; i<trans_h.calc_txf;i++) begin
-        @(vif.drv_cb iff vif.drv_cb.hready);
+        iff(vif.drv.hready);
+        @(vif.drv_cb);
         if(trans_h.hwrite)
           vif.drv_cb.hwdata <= trans_h.hwdata.pop_front();
       end
