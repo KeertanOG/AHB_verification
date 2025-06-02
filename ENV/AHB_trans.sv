@@ -19,7 +19,7 @@ typedef enum bit[2:0] {SINGLE, INCR, WRAP4, INCR4, WRAP8, INCR8, WRAP16, INCR16}
 
 class AHB_trans;
   
- rand bit [`ADDR_WIDTH-1:0]haddr[$];                 //address bus (taken as array to generate all the addresses for the burst transaction)
+  rand bit [`ADDR_WIDTH-1:0]haddr[$];                 //address bus (taken as array to generate all the addresses for the burst transaction)
   bit [1:0]htrans[$];                         //transaction type
   rand bit hwrite;                            //transfer direction
   rand bit[2:0]hsize;                         //transfer size
@@ -41,7 +41,8 @@ class AHB_trans;
   constraint hsize_range {hsize inside {[0:2]};}
   constraint align_address {
     haddr[0] % (1 << hsize) == 0;
-    //haddr[0] == 'h20;}                       //constraint for address alignment with hsize
+    //haddr[0] == 'h20;
+  }                       //constraint for address alignment with hsize
   constraint priority_c {
     solve hburst_e before hsize;      //for 1kb limit
     solve hburst_e before haddr;
@@ -65,7 +66,7 @@ constraint arr_size_define {
 
 constraint hwdata_values{
   foreach(hwdata[i]) {
-    limit == (2**(8*(hsize+1))) - hwdata[i] inside {[0:limit-1]};
+    limit == (2**(8*(hsize+1))) -> hwdata[i] inside {[0:limit-1]};
   }
 }
 
