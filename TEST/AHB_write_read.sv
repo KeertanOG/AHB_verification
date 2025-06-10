@@ -32,8 +32,8 @@ class AHB_write_read extends AHB_gen;
     repeat(1) begin
       trans_h =new();
 //      trans_copy = new trans_h;
-      trans_h.haddr = {'h38, 'h3a, 'h3c, 'h3e};
       void'(trans_h.randomize() with {hburst_e == INCR4; hsize == 2; hwrite == 0;});
+      trans_h.haddr = {'h38, 'h3a, 'h3c, 'h3e};
       gen2drv.put(trans_h);
       trans_h.print("Generator"); 
       // #10;

@@ -99,19 +99,39 @@ constraint hwdata_values{
   endfunction
 
   function void post_randomize();
-    for(int i=1; i<haddr.size;i++) begin
-      haddr[i] = haddr[i-1] + (2**hsize);
+      /*
+      for (int i=1; i < haddr.size; i++) begin
+        haddr[i] = haddr[i-1] + (2**hsize);
+      end*/
+  
+    if(hburst == INCR || hburst == INCR4 || hburst == INCR8 || hburst == INCR16) begin
+      for(int i=1; i < haddr.size;i++) begin
+        haddr[i] = haddr[i-1] + (2**hsize);
+      end
     end
-
-    //htrans = new[length];
+    if(hburst == WRAP4 || hburst == WRAP8 || hburst == WRAP16) begin
+      int a = (haddr[0]/(haddr.size*(2**hsize)));
+      bit [`ADDR_WIDTH-1: 0] start_addr = a*(haddr.size*(2**hsize));
+      bit [`ADDR_WIDTH-1: 0] end_addr = start_addr + (haddr.size*(2**hsize));
+      for(int i=0; i < haddr.size;i++) begin
+        if(i!=0) begin
+          if(haddr[i-1] == end_addr ) begin
+            haddr[i] = ((haddr[0]/(haddr.size*(2*hsize))))(haddr.size*(2**hsize));
+          end
+          else haddr[i] = haddr[i-1]+(2**hsize);
+        end
+      end
+    end
+    //htrans = new [length];
     //htrans[0] = 2'b10;
     htrans.push_back(2'b10);
-    for(int i = 1; i<length-1; i++)
+    for (int i = 1; i< length -1; i++)
       htrans.push_back(2'b11);
-    if(hburst_e == INCR)
+    if (hburst_e == INCR)
       htrans.push_back(2'b10);
-    else 
+    else
       htrans.push_back(2'b11);
+  
   endfunction
 endclass
 
