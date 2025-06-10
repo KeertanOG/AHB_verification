@@ -104,12 +104,12 @@ constraint hwdata_values{
         haddr[i] = haddr[i-1] + (2**hsize);
       end*/
   
-    if(hburst == INCR || hburst == INCR4 || hburst == INCR8 || hburst == INCR16) begin
+    if(hburst_e == INCR || hburst_e == INCR4 || hburst_e == INCR8 || hburst_e == INCR16) begin
       for(int i=1; i < haddr.size;i++) begin
         haddr[i] = haddr[i-1] + (2**hsize);
       end
     end
-    if(hburst == WRAP4 || hburst == WRAP8 || hburst == WRAP16) begin
+    if(hburst_e == WRAP4 || hburst_e == WRAP8 || hburst_e == WRAP16) begin
       int a = (haddr[0]/(haddr.size*(2**hsize)));
       bit [`ADDR_WIDTH-1: 0] start_addr = a*(haddr.size*(2**hsize));
       bit [`ADDR_WIDTH-1: 0] end_addr = start_addr + (haddr.size*(2**hsize));
