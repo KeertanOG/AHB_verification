@@ -116,7 +116,7 @@ constraint hwdata_values{
       for(int i=0; i < haddr.size;i++) begin
         if(i!=0) begin
           if(haddr[i-1] == end_addr ) begin
-            haddr[i] = ((haddr[0]/(haddr.size*(2*hsize))))(haddr.size*(2**hsize));
+            haddr[i] = (haddr[0]/(haddr.size*(2*hsize)))*(haddr.size*(2**hsize));
           end
           else haddr[i] = haddr[i-1]+(2**hsize);
         end
