@@ -21,7 +21,10 @@ class AHB_idle_test extends AHB_gen;
     //back to back write operation
     repeat(5) begin
       trans_h = new();
-      void'(trans_h.randomize() with {htrans == 2'b00;});
+      void'(trans_h.randomize());
+      trans_h.htrans.delete();
+      for(int i=0; i<trans_h.calc_txf - 1; i++)
+        trans_h.htrans.push_back(2'b00);
       gen2drv.put(trans_h);
       trans_h.print("Generator");
     end
