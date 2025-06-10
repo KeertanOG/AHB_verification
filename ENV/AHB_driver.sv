@@ -303,6 +303,7 @@ class AHB_driver;
         end
         else begin vif.drv_cb.htrans <= trans_h.htrans.pop_front(); end
       end
+      trans_h1.print("Driver");
       //$display($time,"address phase completed");
       //->AHB_pkg::data_driven;
     //end
