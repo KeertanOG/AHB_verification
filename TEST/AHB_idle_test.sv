@@ -5,7 +5,7 @@
 // Create Date: 4.5.2025 10:41:16
 // Module Name: AHB_idle_test
 // Project Name: AHB slave verification 
-// Description: Testcase for back to back write and followed by back to back read
+// Description: Testcase for idle burst transfer
 //
 // v1.0 - File Created
 ///////////////////////////////////////

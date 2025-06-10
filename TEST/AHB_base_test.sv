@@ -26,6 +26,7 @@ class AHB_base_test;
   //testcase handle
   AHB_write_read wr_h;
   AHB_back2back b2b_h;
+  AHB_idle_test idt_h;
 
   // Build phase - instantiate and configure environment
   function void build();
@@ -41,6 +42,12 @@ class AHB_base_test;
       b2b_h = new();
       env.gen = b2b_h;
     end
+
+    if($test$plusargs("IDLE_TEST")) begin
+      idt_h = new();
+      env.gen = idt_h;
+    end
+
     //$display("Build called");
   endfunction
 
