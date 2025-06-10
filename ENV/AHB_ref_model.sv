@@ -32,7 +32,7 @@ class AHB_ref_model;
   endfunction
 
   task run();
-    repeat(5) begin
+    forever begin
    // forever begin
       mon2ref.get(trans_h);
       trans_h2 = new trans_h;
@@ -46,7 +46,7 @@ class AHB_ref_model;
     bit[`DATA_WIDTH-1 :0]temp_data;
     for(int i=0; i<trans_h.calc_txf; i++) begin         //calculating transaction size and no of transfers
       if(trans_h.hwrite) begin
-        temp_data = trans_h.hwdata.pop_back();
+        temp_data = trans_h.hwdata.pop_front();
         for(int j=0; j<btw_addr;j++)
           mem[trans_h.haddr[i]+j] = temp_data[(j*8)+:8];
       end

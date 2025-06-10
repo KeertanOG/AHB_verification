@@ -32,7 +32,7 @@ class AHB_scb;
   endfunction
 
   task run();
-    repeat(5) begin
+    forever begin
 //    forever begin
       mon2scb.get(act_data);
       ref2scb.get(exp_data);
