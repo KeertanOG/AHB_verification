@@ -74,27 +74,27 @@ module AHB_tb_top;
   //checking the control signals
   sequence stability;
     //When hready = 0, control signals must remain stable.
-    inf.!hready ==> $stable(inf.haddr) && $stable(inf.htrans) && $stable(inf.hsize) &&
+    !inf.hready ==> $stable(inf.haddr) && $stable(inf.htrans) && $stable(inf.hsize) &&
     $stable(inf.hwrite) && $stable(inf.hburst) && $stable(inf.hprot);
   endsequence 
   
   //checking htrans according to the protocol
   sequence vaild_transfer;
   //htrans must be NONSEQ or SEQ when HSEL is high and HREADY is 1.
-    HSEL && HREADY ==> (HTRANS == 2'b10 || HTRANS == 2'b11);
+    inf.hsel && inf.hready ==> (inf.htrans == 2'b10 || inf.htrans == 2'b11);
   endsequence 
   
   //hready during start of the transfer
   sequence transfer_start;
     //transfer starts only when hready is high
-    (HTRANS == 2'b10 || HTRANS == 2'b11) |-> HREADY; 
+    (inf.htrans == 2'b10 || inf.htrans == 2'b11) |-> inf.hready; 
   endsequence
   
   //checks the stability of control signals during busy
   sequence check_busy;
   //when there is a busy transfer all signal must stable 
-    HTRANS ==2'b01 |->   $stable(HADDR) &&  $stable(HSIZE) &&
-    $stable(HWRITE) && $stable(HBURST);
+    inf.htrans ==2'b01 |-> $stable(inf.haddr) && $stable(inf.hsize) &&
+    $stable(inf.hwrite) && $stable(inf.hburst);
   endsequence  
 
   //properties
