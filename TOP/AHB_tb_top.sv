@@ -71,6 +71,62 @@ module AHB_tb_top;
     #100 $finish;
   end
   
+  //checking the control signals
+  sequence stability;
+    //When hready = 0, control signals must remain stable.
+    inf.!hready ==> $stable(inf.haddr) && $stable(inf.htrans) && $stable(inf.hsize) &&
+    $stable(inf.hwrite) && $stable(inf.hburst) && $stable(inf.hprot);
+  endsequence 
+  
+  //checking htrans according to the protocol
+  sequence vaild_transfer;
+  //htrans must be NONSEQ or SEQ when HSEL is high and HREADY is 1.
+    HSEL && HREADY ==> (HTRANS == 2'b10 || HTRANS == 2'b11);
+  endsequence 
+  
+  //hready during start of the transfer
+  sequence transfer_start;
+    //transfer starts only when hready is high
+    (HTRANS == 2'b10 || HTRANS == 2'b11) |-> HREADY; 
+  endsequence
+  
+  //checks the stability of control signals during busy
+  sequence check_busy;
+  //when there is a busy transfer all signal must stable 
+    HTRANS ==2'b01 |->   $stable(HADDR) &&  $stable(HSIZE) &&
+    $stable(HWRITE) && $stable(HBURST);
+  endsequence  
+
+  //properties
+  
+  property check_stability;
+    @(posedge clk) stability;
+  endproperty
+
+  property check_transfer_start;
+    @(posedge clk) transfer_start;
+  endproperty
+
+  property check_control_busy;
+    @(posedge clk) check_busy;
+  endproperty
+
+  property check_valid_transfer;
+    @(posedge clk) valid transfer;
+  endproperty
+
+  //assertion
+  assert property (check_stability)
+    else $error("control signal changed during wait state");
+
+  assert property (check_transfer_start)
+    else $error("Invalid start of the transfer");
+
+  assert property(check_control_busy)
+    else $error("control signals are not changed during busy");
+
+  assert property(check_valid_transfer)
+    else $error("Invalid transfer");
 endmodule
 
 `endif
