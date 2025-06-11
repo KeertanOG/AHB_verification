@@ -72,60 +72,40 @@ module AHB_tb_top;
   end
   
   //checking the control signals
-  sequence stability;
+  property stability;
     //When hready = 0, control signals must remain stable.
-    !inf.hready ==> $stable(inf.haddr) && $stable(inf.htrans) && $stable(inf.hsize) &&
-    $stable(inf.hwrite) && $stable(inf.hburst) && $stable(inf.hprot);
-  endsequence 
+    @(posedge hclk) !inf.hready |-> ($stable(inf.haddr) && $stable(inf.htrans) && $stable(inf.hsize) && $stable(inf.hwrite) && $stable(inf.hburst) && $stable(inf.hprot));
+  endproperty 
   
   //checking htrans according to the protocol
-  sequence vaild_transfer;
+  property valid_transfer;
   //htrans must be NONSEQ or SEQ when HSEL is high and HREADY is 1.
-    inf.hsel && inf.hready ==> (inf.htrans == 2'b10 || inf.htrans == 2'b11);
-  endsequence 
+    @(posedge hclk) (inf.hsel && inf.hready) |-> (inf.htrans == 2'b10 || inf.htrans == 2'b11);
+  endproperty 
   
   //hready during start of the transfer
-  sequence transfer_start;
+  property transfer_start;
     //transfer starts only when hready is high
-    (inf.htrans == 2'b10 || inf.htrans == 2'b11) |-> inf.hready; 
-  endsequence
+    @(posedge hclk) (inf.htrans == 2'b10 || inf.htrans == 2'b11) |-> inf.hready; 
+  endproperty
   
   //checks the stability of control signals during busy
-  sequence check_busy;
+  property check_busy;
   //when there is a busy transfer all signal must stable 
-    inf.htrans ==2'b01 |-> $stable(inf.haddr) && $stable(inf.hsize) &&
-    $stable(inf.hwrite) && $stable(inf.hburst);
-  endsequence  
-
-  //properties
-  
-  property check_stability;
-    @(posedge clk) stability;
-  endproperty
-
-  property check_transfer_start;
-    @(posedge clk) transfer_start;
-  endproperty
-
-  property check_control_busy;
-    @(posedge clk) check_busy;
-  endproperty
-
-  property check_valid_transfer;
-    @(posedge clk) valid transfer;
+    @(posedge hclk) inf.htrans ==2'b01 |-> ($stable(inf.haddr) && $stable(inf.hsize) && $stable(inf.hwrite) && $stable(inf.hburst));
   endproperty
 
   //assertion
-  assert property (check_stability)
+  assert property (stability)
     else $error("control signal changed during wait state");
 
-  assert property (check_transfer_start)
+  assert property (transfer_start)
     else $error("Invalid start of the transfer");
 
-  assert property(check_control_busy)
+  assert property(check_busy)
     else $error("control signals are not changed during busy");
 
-  assert property(check_valid_transfer)
+  assert property(valid_transfer)
     else $error("Invalid transfer");
 endmodule
 
