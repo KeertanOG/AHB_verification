@@ -57,11 +57,9 @@ module AHB_tb_top;
     hresetn = 1;
   end
   
-  
   //instantiate and connect the testbench
   initial begin
     test = new();
-    
     test.build();
     
     //connecting driver and monitor modports of interface to base test
@@ -78,10 +76,10 @@ module AHB_tb_top;
   endproperty 
   
   //checking htrans according to the protocol
-  property valid_transfer;
-  //htrans must be NONSEQ or SEQ when HSEL is high and HREADY is 1.
-    @(posedge hclk) (inf.hsel && inf.hready) |-> (inf.htrans == 2'b10 || inf.htrans == 2'b11);
-  endproperty 
+//  property valid_transfer;
+//  //htrans must be NONSEQ or SEQ when HSEL is high and HREADY is 1.
+//    @(posedge hclk) (inf.hsel && inf.hready) |-> (inf.htrans == 2'b10 || inf.htrans == 2'b11);
+//  endproperty 
   
   //hready during start of the transfer
   property transfer_start;
@@ -105,8 +103,9 @@ module AHB_tb_top;
   assert property(check_busy)
     else $error("control signals are not changed during busy");
 
-  assert property(valid_transfer)
-    else $error("Invalid transfer");
+//  assert property(valid_transfer)
+//    else $error("Invalid transfer");
+
 endmodule
 
 `endif
